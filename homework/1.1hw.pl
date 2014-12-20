@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-open (FILE, "<","/home/words" ) or die "File not found\n";
+open (FILE, "<","../words" ) or die "File not found\n";
 my @array = <FILE>;
 my @count = ();
 foreach my $word (@array) {
