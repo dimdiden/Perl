@@ -2,25 +2,33 @@
 use strict;
 use warnings;
 
-open (FILE, "/etc/services");
+open( FILE, "/etc/services" );
 my @array = <FILE>;
-chomp (@array);
+chomp(@array);
 my %hash = ();
-foreach my $line (@array){
-if (($line !~ m/^#.*$/) and ($line ne "")){ #исключаем комментарии и
-       $line =~ s/\/.*$//;                  #пустые строки 
-       chomp $line;
-       my $serv = (split " ", $line)[0];  
-       my $port = (split " ", $line)[1];  # формируем хэш, незадест.
-       $port = 0 if (not defined $port);  # сервису присваем нулевой порт
-       $hash{$port} = $serv;                  
-} 
+foreach my $line (@array) {
+
+    # исключаем комментарии и пустые строки
+    if ( ( $line !~ m/^#.*$/ ) and ( $line ne "" ) ) {
+        $line =~ s/\/.*$//;
+        chomp $line;
+
+# формируем хэш, незадейств. сервису присваиваем нулевой порт
+        my $serv = ( split " ", $line )[0];
+        my $port = ( split " ", $line )[1];
+        $port = 0 if ( not defined $port );
+        $hash{$port} = $serv;
+    }
 }
-if ((scalar (@ARGV) == 2)and($ARGV[0]<$ARGV[1])){
-for($ARGV[0]..$ARGV[1]){
-       print "$_  -  $hash{$_}" . "\n" if (exists $hash{$_}); # перебирам диапазон совпадений
-}                                                             # аргументов и ключей
+if ( ( scalar(@ARGV) == 2 ) and ( $ARGV[0] < $ARGV[1] ) ) {
+    for ( $ARGV[0] .. $ARGV[1] ) {
+
+# перебираем диапазон совпадений аргументов и ключей
+        print "$_  -  $hash{$_}" . "\n" if ( exists $hash{$_} );
+    }
 }
-else{
-       print "$ARGV[0]  -  $hash{$ARGV[0]}" . "\n" if (exists $hash{$ARGV[0]}); #выводим только 
-}                                                                               #по первому аргументу
+else {
+
+# выводим результат только по первому аргументу
+    print "$ARGV[0]  -  $hash{$ARGV[0]}" . "\n" if ( exists $hash{ $ARGV[0] } );
+}
